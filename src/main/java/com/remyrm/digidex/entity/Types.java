@@ -5,28 +5,30 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.util.List;
-
 @Entity
-public class Levels {
+public class Types {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String levelName;
+    private String typeName;
 
-    public Levels(Integer id, String levels ) {
+    public Types(Integer id, String typeName) {
         this.id = id;
-        this.levelName = levelName;
+        this.typeName = typeName;
     }
-    public Levels() {}
+
+    public Types() {
+    }
+
     public long getId() {
         return id;
     }
 
-    public String getLevelsName() {
-        return levelName;
+    public String getTypeName() {
+        return typeName;
     }
-    public void setLevelName(String levels) {
-        this.levelName = levelName;
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 }

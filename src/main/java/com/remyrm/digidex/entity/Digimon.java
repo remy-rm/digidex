@@ -2,6 +2,8 @@ package com.remyrm.digidex.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Digimon {
 
@@ -14,9 +16,15 @@ public class Digimon {
     @ManyToOne
     private Levels level;
 
-    private String type;
-    private String attribute;
-    private String family;
+    @ManyToOne
+    private Types type;
+
+    @ManyToMany
+    private List<Attribute> attributes;
+
+    @ManyToMany
+    private  List<Family> families;
+
     private String description;
     private String attack;
     private Integer size;
@@ -52,11 +60,11 @@ public class Digimon {
         this.name = name;
     }
 
-    public String getType() {
+    public Types getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Types type) {
         this.type = type;
     }
 
@@ -84,12 +92,20 @@ public class Digimon {
         this.level = level;
     }
 
-    public String getAttribute() {
-        return attribute;
+    public List<Attribute> getAttributes() {
+        return attributes;
     }
 
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
+    public List<Family> getFamilies() {
+        return families;
+    }
+
+    public void setFamilies(List<Family> families) {
+        this.families = families;
+    }
+
+    public void setAttribute(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     public String getMonsterType() {
