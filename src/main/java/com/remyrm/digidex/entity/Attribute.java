@@ -9,26 +9,21 @@ import jakarta.persistence.Id;
 public class Attribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String attributeName;
-
-    public Attribute(Integer id, String attributeName) {
-        this.id = id;
-        this.attributeName = attributeName;
-    }
-
-    public Attribute() {
-    }
+    private long id;    private String attribute;
 
     public long getId() {
         return id;
     }
 
-    public String getAttributeName() {
-        return attributeName;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setAttributeName(String attributeName) {
-        this.attributeName = attributeName;
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 }

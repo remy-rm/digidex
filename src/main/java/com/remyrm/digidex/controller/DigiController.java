@@ -1,32 +1,36 @@
 package com.remyrm.digidex.controller;
 
 import com.remyrm.digidex.entity.Digimon;
-import com.remyrm.digidex.repository.DigiRepository;
+import com.remyrm.digidex.service.GenericApiService;
+import com.remyrm.digidex.service.DigimonApiService;
+import com.remyrm.digidex.repository.DigimonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/digimon") // Base path for all DigiMon-related API endpoints
+@RequestMapping("/digimon")
 public class DigiController {
 
-    @Autowired
-    private DigiRepository digiRepository;
+    private final DigimonRepository digiRepository;
+    private final GenericApiService<Digimon, Long> digimonApiService; // Utilisation du service générique
 
-    // Get all Digimon
+    @Autowired
+    public DigiController(DigimonRepository digiRepository, DigimonApiService digimonApiService) {
+        this.digiRepository = digiRepository;
+        this.digimonApiService = digimonApiService;
+    }
+
     @GetMapping
     public ResponseEntity<List<Digimon>> getAllDigimon() {
         List<Digimon> digimon = digiRepository.findAll();
         return new ResponseEntity<>(digimon, HttpStatus.OK);
     }
 
-    // Get a specific Digimon by ID
     @GetMapping("/{id}")
     public ResponseEntity<Digimon> getDigiMonById(@PathVariable Long id) {
         Optional<Digimon> digiMonOptional = digiRepository.findById(id);
@@ -37,6 +41,11 @@ public class DigiController {
         }
     }
 
+    @PostMapping("/fetch")
+    public ResponseEntity<String> fetchAndSaveDigimon(@RequestParam long id) {
+        digimonApiService.saveEntityFromApi(id); // Appel à la méthode générique
+        return ResponseEntity.ok("Digimon saved successfully");
+    }
 
-    // Update an existing Digimon
+    // Autres méthodes pour mettre à jour les Digimon
 }
