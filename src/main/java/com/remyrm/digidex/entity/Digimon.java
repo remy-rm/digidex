@@ -32,17 +32,17 @@ public class Digimon {
     private Boolean xAntibody;
     private String releaseDate;
 
-    @ManyToOne
-    @JoinColumn(name = "level_id")
-    private Level level;
 
     @ManyToMany
     @JoinTable(
-            name = "digimon_types",
+            name = "digimon_levels",
             joinColumns = @JoinColumn(name = "digimon_id"),
-            inverseJoinColumns = @JoinColumn(name = "type_id")
+            inverseJoinColumns = @JoinColumn(name = "level_id")
     )
-    private Set<Type> types;
+    private Set<Level> level;
+
+    @ManyToOne
+    private Type types;
 
     @ManyToMany
     @JoinTable(
@@ -68,7 +68,6 @@ public class Digimon {
             inverseJoinColumns = @JoinColumn(name = "field_id")
     )
     private Set<Field> fields;
-
 
 
     public Long getId() {
@@ -111,19 +110,19 @@ public class Digimon {
         this.releaseDate = releaseDate;
     }
 
-    public Level getLevel() {
+    public Set<Level> getLevel() {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(Set<Level> level) {
         this.level = level;
     }
 
-    public Set<Type> getTypes() {
+    public Type getTypes() {
         return types;
     }
 
-    public void setTypes(Set<Type> types) {
+    public void setTypes(Type types) {
         this.types = types;
     }
 

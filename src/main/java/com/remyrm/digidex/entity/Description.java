@@ -16,6 +16,7 @@ public class Description {
 
     private String origin;
     private String language;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
 

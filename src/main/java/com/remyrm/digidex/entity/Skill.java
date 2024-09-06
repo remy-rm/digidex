@@ -10,6 +10,8 @@ public class Skill {
     private long id;
     private String skill;
     private String translation;
+    @Column(columnDefinition = "TEXT")
+
     private String description;
     @ManyToOne
     @JoinColumn(name = "digimon_id")

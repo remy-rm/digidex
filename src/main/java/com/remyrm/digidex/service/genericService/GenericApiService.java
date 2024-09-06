@@ -1,4 +1,4 @@
-package com.remyrm.digidex.service;
+package com.remyrm.digidex.service.genericService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public abstract class GenericApiService<T, ID extends Serializable> {
     }
 
     public T fetchEntityById(ID id) {
-        String url = apiUrl + id;
+        String url = "https://digi-api.com/api/v1/" +apiUrl + id;
         String response = restTemplate.getForObject(url, String.class);
 
         if (response != null) {

@@ -1,15 +1,14 @@
 package com.remyrm.digidex.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 
 @Entity
 public class Attribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    private String attribute;
+    private long id;
+
 
     public long getId() {
         return id;
@@ -19,11 +18,25 @@ public class Attribute {
         this.id = id;
     }
 
+    @JsonProperty("name")
+    private String attribute;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     public String getAttribute() {
         return attribute;
     }
 
     public void setAttribute(String attribute) {
         this.attribute = attribute;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

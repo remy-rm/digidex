@@ -11,6 +11,7 @@ public class Field {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @JsonProperty("href")
     private String image;

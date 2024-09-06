@@ -1,26 +1,14 @@
 package com.remyrm.digidex.service;
 
-import com.remyrm.digidex.entity.Digimon;
 import com.remyrm.digidex.entity.Field;
 import com.remyrm.digidex.repository.FieldRepository;
-import jakarta.transaction.Transactional;
+import com.remyrm.digidex.service.genericService.GenericFullService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FieldService {
-
-    final private FieldRepository fieldRepository;
+public class FieldService extends GenericFullService<Field, Long> {
 
     public FieldService(FieldRepository fieldRepository) {
-        this.fieldRepository = fieldRepository;
-    }
-
-    @Transactional
-    public Field saveField(Field field) {
-        return fieldRepository.save(field);
-    }
-
-    public Field getFieldById(long id) {
-        return (Field) fieldRepository.findById(id).orElse(null);
+        super(Field.class, "field/", fieldRepository);
     }
 }
