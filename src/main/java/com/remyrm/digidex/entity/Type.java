@@ -10,15 +10,12 @@ public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @JsonProperty("name")
     private String type;
-
 
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }

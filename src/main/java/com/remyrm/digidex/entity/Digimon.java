@@ -1,7 +1,11 @@
 package com.remyrm.digidex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,29 +13,16 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Digimon {
 
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Ajoutez cette annotation si ID est auto-généré
     private Long id;
 
-    @ManyToMany
-    @JoinTable(
-            name = "digimon_prior_evolutions",
-            joinColumns = @JoinColumn(name = "digimon_id"),
-            inverseJoinColumns = @JoinColumn(name = "prior_evolution_id")
-    )
-    private Set<Evolution> priorEvolutions;
-
-    @ManyToMany
-    @JoinTable(
-            name = "digimon_next_evolutions",
-            joinColumns = @JoinColumn(name = "digimon_id"),
-            inverseJoinColumns = @JoinColumn(name = "next_evolution_id")
-    )
-    private Set<Evolution> nextEvolutions;
-
+    @NotNull
     private String name;
+
     private Boolean xAntibody;
     private String releaseDate;
-
 
     @ManyToMany
     @JoinTable(
@@ -39,27 +30,16 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "level_id")
     )
-    private Set<Level> level;
-
-    @ManyToOne
-    private Type types;
-
-    @ManyToMany
-    @JoinTable(
-            name = "digimon_attributes",
-            joinColumns = @JoinColumn(name = "digimon_id"),
-            inverseJoinColumns = @JoinColumn(name = "attribute_id")
-    )
-    private Set<Attribute> attributes;
+    private Set<Level> levels = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Image> images;
+    private Set<Image> images = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Description> descriptions;
+    private Set<Description> descriptions = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Skill> skills;
+    private Set<Skill> skills = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -67,7 +47,43 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "field_id")
     )
-    private Set<Field> fields;
+    private Set<Field> fields = new HashSet<>();
+
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "digimon_prior_evolutions",
+            joinColumns = @JoinColumn(name = "digimon_id"),
+            inverseJoinColumns = @JoinColumn(name = "prior_evolution_id")
+    )
+    private Set<Evolution> priorEvolutions;
+
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "digimon_next_evolutions",
+            joinColumns = @JoinColumn(name = "digimon_id"),
+            inverseJoinColumns = @JoinColumn(name = "next_evolution_id")
+    )
+    private Set<Evolution> nextEvolutions;
+
+    @ManyToMany
+    @JoinTable(
+            name = "digimon_types",
+            joinColumns = @JoinColumn(name = "digimon_id"),
+            inverseJoinColumns = @JoinColumn(name = "type_id")
+    )
+    private Set<Type> types = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "digimon_attributes",
+            joinColumns = @JoinColumn(name = "digimon_id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id")
+    )
+    private Set<Attribute> attributes = new HashSet<>();
 
 
     public Long getId() {
@@ -110,19 +126,19 @@ public class Digimon {
         this.releaseDate = releaseDate;
     }
 
-    public Set<Level> getLevel() {
-        return level;
+    public Set<Level> getLevels() {
+        return levels;
     }
 
-    public void setLevel(Set<Level> level) {
-        this.level = level;
+    public void setLevels(Set<Level> levels) {
+        this.levels = levels;
     }
 
-    public Type getTypes() {
+    public Set<Type> getTypes() {
         return types;
     }
 
-    public void setTypes(Type types) {
+    public void setTypes(Set<Type> types) {
         this.types = types;
     }
 

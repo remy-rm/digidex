@@ -1,12 +1,15 @@
 package com.remyrm.digidex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.remyrm.digidex.common.HasImage;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
 @Entity
-public class Field {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Field implements HasImage {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
@@ -44,10 +47,12 @@ public class Field {
         this.name = name;
     }
 
+    @Override
     public String getImage() {
         return image;
     }
 
+    @Override
     public void setImage(String image) {
         this.image = image;
     }

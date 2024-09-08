@@ -1,8 +1,10 @@
 package com.remyrm.digidex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Skill {
 
     @Id
@@ -11,7 +13,6 @@ public class Skill {
     private String skill;
     private String translation;
     @Column(columnDefinition = "TEXT")
-
     private String description;
     @ManyToOne
     @JoinColumn(name = "digimon_id")

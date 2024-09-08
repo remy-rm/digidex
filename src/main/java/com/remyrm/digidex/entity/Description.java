@@ -1,23 +1,22 @@
 package com.remyrm.digidex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Description {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @ManyToOne
-    @JoinColumn(name = "digimon_id")
-    private Digimon digimon;
-
     private Long id;
-
     private String origin;
     private String language;
     @Column(columnDefinition = "TEXT")
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "digimon_id")
+    private Digimon digimon;
 
 
 
