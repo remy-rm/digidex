@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.remyrm.digidex.common.HasImage;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,7 +22,7 @@ public class Field implements HasImage {
 
 
     @ManyToMany(mappedBy = "fields")
-    private Set<Digimon> digimons;
+    private Set<Digimon> digimons = new HashSet<>();
 
     public long getId() {
         return id;

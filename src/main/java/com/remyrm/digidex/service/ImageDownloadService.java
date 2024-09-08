@@ -21,9 +21,6 @@ public class ImageDownloadService {
 
     public String downloadImage(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
-        String fileExtension = imageUrl.substring(imageUrl.lastIndexOf('.'));
-        String fileName = UUID.randomUUID().toString() + fileExtension; // Génère un nom unique pour chaque image
-
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();
@@ -31,8 +28,12 @@ public class ImageDownloadService {
         // Vérifiez que l'URL pointe vers une image
         String contentType = connection.getContentType();
         if (contentType.startsWith("image/")) {
+            // Obtenez l'extension de fichier à partir du type MIME
+            String fileExtension = "." + contentType.substring(contentType.lastIndexOf('/') + 1);
+            String fileName = UUID.randomUUID().toString() + fileExtension;
+
             // Créer le répertoire si nécessaire
-            Path imagePath = Paths.get(imageStoragePath + fileName);
+            Path imagePath = Paths.get(imageStoragePath, fileName);
             Files.createDirectories(imagePath.getParent());
 
             // Télécharger et sauvegarder l'image

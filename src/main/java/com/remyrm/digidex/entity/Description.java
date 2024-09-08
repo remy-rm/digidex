@@ -16,7 +16,7 @@ public class Description {
     private String description;
     @ManyToOne
     @JoinColumn(name = "digimon_id")
-    private Digimon digimon;
+    private Digimon digimon ;
 
 
 

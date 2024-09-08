@@ -18,6 +18,7 @@ public class DigimonController {
 
     @PostMapping("/create/{id}")
     public ResponseEntity<String> createDigimon(@PathVariable Long id) {
+        System.out.println("Création du Digimon avec l'id : " + id);
         Digimon digimon = digimonService.saveEntityFromApi(id);
         if (digimon != null) {
             return ResponseEntity.ok("Digimon créé avec succès");

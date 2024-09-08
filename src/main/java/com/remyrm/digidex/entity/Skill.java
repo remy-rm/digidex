@@ -1,6 +1,8 @@
 package com.remyrm.digidex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,11 +11,16 @@ public class Skill {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private long id;
+
     private String skill;
+
     private String translation;
+
     @Column(columnDefinition = "TEXT")
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "digimon_id")
     private Digimon digimon;
@@ -22,6 +29,15 @@ public class Skill {
     public long getId() {
         return id;
     }
+
+    public Digimon getDigimon() {
+        return digimon;
+    }
+
+    public void setDigimon(Digimon digimon) {
+        this.digimon = digimon;
+    }
+
 
     public String getSkill() {
         return skill;

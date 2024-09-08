@@ -5,6 +5,7 @@ import com.remyrm.digidex.common.HasImage;
 import com.remyrm.digidex.entity.Description;
 import com.remyrm.digidex.entity.Digimon;
 import com.remyrm.digidex.entity.Image;
+import com.remyrm.digidex.entity.Skill;
 import com.remyrm.digidex.service.ImageDownloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -44,26 +45,36 @@ public abstract class GenericApiService<T, ID extends Serializable> {
                 // Traitement spécifique si l'entité est de type Digimon
                 if (entity instanceof Digimon) {
                     Digimon digimon = (Digimon) entity;
+
                     // Gérer les descriptions
                     if (digimon.getDescriptions() != null) {
                         for (Description desc : digimon.getDescriptions()) {
                             desc.setDigimon(digimon); // Associer la description à l'entité Digimon
                         }
                     }
+
                     // Gérer les images
                     if (digimon.getImages() != null) {
                         for (Image image : digimon.getImages()) {
+                            try {
+                                // Télécharger l'image en utilisant son URL et obtenir le chemin local
+                                String localImagePath = imageDownloadService.downloadImage(image.getImage());
+
+                                // Assigner le chemin local de l'image à l'entité Image
+                                image.setImage(localImagePath);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();  // Gérer les erreurs liées au téléchargement
+                            }
                             image.setDigimon(digimon); // Associer l'image à l'entité Digimon
                         }
                     }
-
-                }
-
-                // Télécharger l'image si nécessaire
-                if (entity instanceof HasImage) {
-                    String imageUrl = ((HasImage) entity).getImage();
-                    String storedImagePath = imageDownloadService.downloadImage(imageUrl);
-                    ((HasImage) entity).setImage(storedImagePath);
+                    // Gérer les compétences
+                    if (digimon.getSkills() != null) {
+                        for (Skill skill : digimon.getSkills()) {
+                            skill.setDigimon(digimon); // Associer la compétence à l'entité Digimon
+                        }
+                    }
                 }
 
                 return entity;
@@ -73,7 +84,6 @@ public abstract class GenericApiService<T, ID extends Serializable> {
         }
         return null;
     }
-
 
     public T saveEntityFromApi(ID id) {
         T entity = fetchEntityById(id);

@@ -3,6 +3,7 @@ package com.remyrm.digidex.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,10 +23,10 @@ public class Evolution {
 
 
     @ManyToMany(mappedBy = "priorEvolutions")
-    private Set<Digimon> priorDigimons;
+    private Set<Digimon> priorDigimons = new HashSet<>();
 
     @ManyToMany(mappedBy = "nextEvolutions")
-    private Set<Digimon> nextDigimons;
+    private Set<Digimon> nextDigimons = new HashSet<>();
 
     // Constructeur par défaut
     public Evolution() {

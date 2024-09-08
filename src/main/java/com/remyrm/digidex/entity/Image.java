@@ -21,6 +21,7 @@ public class Image implements HasImage {
     @JoinColumn(name = "digimon_id")
     private Digimon digimon;
 
+
     public String getImage() {
         return image;
     }

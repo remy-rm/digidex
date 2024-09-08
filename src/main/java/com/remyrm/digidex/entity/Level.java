@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,9 +20,8 @@ public class Level {
     private String level;
     private String description;
 
-    @ManyToMany
-    private Set<Digimon> digimon;
-
+    @ManyToMany(mappedBy = "levels")
+    private Set<Digimon> digimon = new HashSet<>();
 
     public Set<Digimon> getDigimon() {
         return digimon;
