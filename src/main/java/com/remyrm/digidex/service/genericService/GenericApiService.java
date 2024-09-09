@@ -57,11 +57,17 @@ public abstract class GenericApiService<T, ID extends Serializable> {
                     if (digimon.getImages() != null) {
                         for (Image image : digimon.getImages()) {
                             try {
-                                // Télécharger l'image en utilisant son URL et obtenir le chemin local
-                                String localImagePath = imageDownloadService.downloadImage(image.getImage());
+                                // Vérifier si l'image existe déjà en local avant de la télécharger
+                                if (!imageDownloadService.imageExists(image.getImage())) {
+                                    // Télécharger l'image en utilisant son URL et obtenir le chemin local
+                                    String localImagePath = imageDownloadService.downloadImage(image.getImage());
 
-                                // Assigner le chemin local de l'image à l'entité Image
-                                image.setImage(localImagePath);
+                                    // Assigner le chemin local de l'image à l'entité Image
+                                    image.setImage(localImagePath);
+                                } else {
+                                    // Si l'image existe déjà, ne pas la télécharger et garder le chemin existant
+                                    System.out.println("Image déjà existante, pas de téléchargement nécessaire.");
+                                }
 
                             } catch (IOException e) {
                                 e.printStackTrace();  // Gérer les erreurs liées au téléchargement
@@ -69,6 +75,7 @@ public abstract class GenericApiService<T, ID extends Serializable> {
                             image.setDigimon(digimon); // Associer l'image à l'entité Digimon
                         }
                     }
+
                     // Gérer les compétences
                     if (digimon.getSkills() != null) {
                         for (Skill skill : digimon.getSkills()) {

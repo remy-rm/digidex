@@ -15,7 +15,6 @@ public class Digimon {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Ajoutez cette annotation si ID est auto-généré
     private Long id;
 
     @NotNull
