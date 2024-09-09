@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @Service
 public class ImageDownloadService {
@@ -27,21 +26,16 @@ public class ImageDownloadService {
 
         // Vérifiez que l'URL pointe vers une image
         String contentType = connection.getContentType();
+        String fileName = extractFileNameFromUrl(imageUrl);
+        Path imagePath = Paths.get(imageStoragePath, fileName);
         if (contentType.startsWith("image/")) {
-            // Utilisez le nom de fichier de l'URL pour éviter les doublons
-            String fileName = extractFileNameFromUrl(imageUrl);
-
-            // Créer le répertoire si nécessaire
-            Path imagePath = Paths.get(imageStoragePath, fileName);
+            System.out.println(imageUrl);
             Files.createDirectories(imagePath.getParent());
 
-            // Si l'image existe déjà, ne pas la télécharger à nouveau
             if (Files.exists(imagePath)) {
-                System.out.println("Image déjà existante : " + imagePath);
-                return imagePath.toString(); // Retourne le chemin local de l'image existante
+                System.out.println("Worrrrrr");
+                return imagePath.toString();
             }
-
-            // Télécharger et sauvegarder l'image si elle n'existe pas
             try (InputStream in = connection.getInputStream()) {
                 Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -53,16 +47,16 @@ public class ImageDownloadService {
     }
 
     public boolean imageExists(String imageUrl) {
-        // Utiliser le même nom de fichier généré à partir de l'URL
+        System.out.println(imageUrl);
         String fileName = extractFileNameFromUrl(imageUrl);
         Path imagePath = Paths.get(imageStoragePath, fileName);
+        System.out.println(imagePath);
 
-        // Vérifier si le fichier existe
         return Files.exists(imagePath);
     }
 
-    // Méthode utilitaire pour extraire le nom de fichier à partir de l'URL
     private String extractFileNameFromUrl(String imageUrl) {
+        System.out.println(imageUrl.substring(imageUrl.lastIndexOf('/') + 1));
         return imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     }
 }

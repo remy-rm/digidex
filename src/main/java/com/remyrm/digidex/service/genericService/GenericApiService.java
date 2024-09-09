@@ -2,10 +2,7 @@ package com.remyrm.digidex.service.genericService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.remyrm.digidex.common.HasImage;
-import com.remyrm.digidex.entity.Description;
-import com.remyrm.digidex.entity.Digimon;
-import com.remyrm.digidex.entity.Image;
-import com.remyrm.digidex.entity.Skill;
+import com.remyrm.digidex.entity.*;
 import com.remyrm.digidex.service.ImageDownloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class GenericApiService<T, ID extends Serializable> {
 
@@ -46,6 +45,42 @@ public abstract class GenericApiService<T, ID extends Serializable> {
                 if (entity instanceof Digimon) {
                     Digimon digimon = (Digimon) entity;
 
+                    if (digimon.getPriorEvolutions() != null) {
+                        System.out.println("Prior evolutions: " + digimon.getPriorEvolutions());
+                        Set<PriorEvolution> priorEvolutionsSet = new HashSet<>();
+                        for (PriorEvolution priorEvolution : digimon.getPriorEvolutions()) {
+                            // Ne conserver que les champs nécessaires
+                            PriorEvolution formattedPriorEvolution = new PriorEvolution();
+                            formattedPriorEvolution.setDigimonPriorEvolutionId(priorEvolution.getId()); // ID de l'évolution précédente
+                            formattedPriorEvolution.setCondition(priorEvolution.getCondition()); // Condition de l'évolution
+
+                            // Associer l'évolution au Digimon
+                            formattedPriorEvolution.setDigimon(digimon);
+
+                            // Ajouter à l'ensemble des évolutions
+                            priorEvolutionsSet.add(formattedPriorEvolution);
+                        }
+                        digimon.setPriorEvolutions(priorEvolutionsSet);
+                    }
+
+                    if (digimon.getNextEvolutions() != null) {
+                        System.out.println("Next evolutions: " + digimon.getNextEvolutions());
+                        Set<NextEvolution> nextEvolutionsSet = new HashSet<>();
+                        for (NextEvolution nextEvolution : digimon.getNextEvolutions()) {
+                            // Ne conserver que les champs nécessaires
+                            NextEvolution formattedNextEvolution = new NextEvolution();
+                            formattedNextEvolution.setDigimonNextEvolutionId(nextEvolution.getId()); // ID de l'évolution suivante
+                            formattedNextEvolution.setCondition(nextEvolution.getCondition()); // Condition de l'évolution
+
+                            // Associer l'évolution au Digimon
+                            formattedNextEvolution.setDigimon(digimon);
+
+                            // Ajouter à l'ensemble des évolutions
+                            nextEvolutionsSet.add(formattedNextEvolution);
+                        }
+                        digimon.setNextEvolutions(nextEvolutionsSet);
+                    }
+
                     // Gérer les descriptions
                     if (digimon.getDescriptions() != null) {
                         for (Description desc : digimon.getDescriptions()) {
@@ -57,17 +92,9 @@ public abstract class GenericApiService<T, ID extends Serializable> {
                     if (digimon.getImages() != null) {
                         for (Image image : digimon.getImages()) {
                             try {
-                                // Vérifier si l'image existe déjà en local avant de la télécharger
-                                if (!imageDownloadService.imageExists(image.getImage())) {
-                                    // Télécharger l'image en utilisant son URL et obtenir le chemin local
                                     String localImagePath = imageDownloadService.downloadImage(image.getImage());
-
-                                    // Assigner le chemin local de l'image à l'entité Image
                                     image.setImage(localImagePath);
-                                } else {
-                                    // Si l'image existe déjà, ne pas la télécharger et garder le chemin existant
-                                    System.out.println("Image déjà existante, pas de téléchargement nécessaire.");
-                                }
+
 
                             } catch (IOException e) {
                                 e.printStackTrace();  // Gérer les erreurs liées au téléchargement
@@ -82,6 +109,7 @@ public abstract class GenericApiService<T, ID extends Serializable> {
                             skill.setDigimon(digimon); // Associer la compétence à l'entité Digimon
                         }
                     }
+
                 }
 
                 return entity;

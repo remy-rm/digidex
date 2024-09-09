@@ -16,10 +16,8 @@ public class Digimon {
 
     @Id
     private Long id;
-
     @NotNull
     private String name;
-
     private Boolean xAntibody;
     private String releaseDate;
 
@@ -48,26 +46,6 @@ public class Digimon {
     )
     private Set<Field> fields = new HashSet<>();
 
-
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(
-            name = "digimon_prior_evolutions",
-            joinColumns = @JoinColumn(name = "digimon_id"),
-            inverseJoinColumns = @JoinColumn(name = "prior_evolution_id")
-    )
-    private Set<Evolution> priorEvolutions;
-
-
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(
-            name = "digimon_next_evolutions",
-            joinColumns = @JoinColumn(name = "digimon_id"),
-            inverseJoinColumns = @JoinColumn(name = "next_evolution_id")
-    )
-    private Set<Evolution> nextEvolutions;
-
     @ManyToMany
     @JoinTable(
             name = "digimon_types",
@@ -83,6 +61,12 @@ public class Digimon {
             inverseJoinColumns = @JoinColumn(name = "attribute_id")
     )
     private Set<Attribute> attributes = new HashSet<>();
+
+    @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<NextEvolution> nextEvolutions = new HashSet<>();
+
+    @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PriorEvolution> priorEvolutions = new HashSet<>();
 
 
     public Long getId() {
@@ -173,19 +157,28 @@ public class Digimon {
         this.skills = skills;
     }
 
-    public Set<Evolution> getPriorEvolutions() {
+    public Set<PriorEvolution> getPriorEvolutions() {
         return priorEvolutions;
     }
 
-    public void setPriorEvolutions(Set<Evolution> priorEvolutions) {
-        this.priorEvolutions = priorEvolutions;
+    public void setPriorEvolutions(Set<PriorEvolution> priorEvolutions) {
+        // Vider la collection existante au lieu de la remplacer
+        this.priorEvolutions.clear();
+        if (priorEvolutions != null) {
+            this.priorEvolutions.addAll(priorEvolutions);
+        }
     }
 
-    public Set<Evolution> getNextEvolutions() {
+    public Set<NextEvolution> getNextEvolutions() {
         return nextEvolutions;
     }
 
-    public void setNextEvolutions(Set<Evolution> nextEvolutions) {
-        this.nextEvolutions = nextEvolutions;
+    public void setNextEvolutions(Set<NextEvolution> nextEvolutions) {
+        // Vider la collection existante au lieu de la remplacer
+        this.nextEvolutions.clear();
+        if (nextEvolutions != null) {
+            this.nextEvolutions.addAll(nextEvolutions);
+        }
     }
+
 }
