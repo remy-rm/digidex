@@ -11,7 +11,7 @@ public class NextEvolution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "`condition`")
+    @Column(name = "`condition`" , columnDefinition = "TEXT")
     private String condition;
     @JoinColumn(name="digimon_next_evolution_id")
     private Long digimonNextEvolutionId;

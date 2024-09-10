@@ -16,23 +16,17 @@ public class DigimonController {
         this.digimonService = digimonService;
     }
 
-    @PostMapping("/create/{id}")
-    public ResponseEntity<String> createDigimon(@PathVariable Long id,
-                                                @RequestParam(defaultValue = "false") boolean includeEvolutions) {
-        System.out.println("Création du Digimon avec l'id : " + id + ", inclure les évolutions : " + includeEvolutions);
-
+    @PostMapping("/fetch")
+    public ResponseEntity<String> createDigimon(@RequestParam long id) {
         Digimon digimon = digimonService.saveEntityFromApi(id);
         if (digimon != null) {
-
-            // Si includeEvolutions est false, on met à jour les évolutions à nul
-            // Sauvegarde du Digimon mis à jour dans le repository
             digimonService.save(digimon);
-
             return ResponseEntity.ok("Digimon créé avec succès");
         } else {
             return ResponseEntity.status(404).body("Digimon non trouvé");
         }
     }
+
 }
 
 

@@ -18,6 +18,7 @@ public class Level {
 
     @JsonProperty("name")
     private String level;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToMany(mappedBy = "levels")

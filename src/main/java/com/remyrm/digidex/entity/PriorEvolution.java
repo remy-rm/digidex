@@ -11,7 +11,7 @@ public class PriorEvolution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "`condition`")
+    @Column(name = "`condition`", columnDefinition = "TEXT")
     private String condition;
     @Column(name = "digimon_prior_evolution_id")
     private Long digimonPriorEvolutionId;

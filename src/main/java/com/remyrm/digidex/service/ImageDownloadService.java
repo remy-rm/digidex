@@ -24,23 +24,21 @@ public class ImageDownloadService {
         connection.setRequestMethod("GET");
         connection.connect();
 
-        // Vérifiez que l'URL pointe vers une image
         String contentType = connection.getContentType();
         String fileName = extractFileNameFromUrl(imageUrl);
         Path imagePath = Paths.get(imageStoragePath, fileName);
         if (contentType.startsWith("image/")) {
-            System.out.println(imageUrl);
+
             Files.createDirectories(imagePath.getParent());
 
             if (Files.exists(imagePath)) {
-                System.out.println("Worrrrrr");
                 return imagePath.toString();
             }
             try (InputStream in = connection.getInputStream()) {
                 Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return imagePath.toString(); // Retourne le chemin local de l'image téléchargée
+            return imagePath.toString();
         } else {
             throw new IOException("L'URL ne pointe pas vers une image valide");
         }
