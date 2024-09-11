@@ -4,21 +4,26 @@ import com.remyrm.digidex.entity.*;
 import com.remyrm.digidex.repository.DigimonRepository;
 import com.remyrm.digidex.service.genericService.GenericFullService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class DigimonService extends GenericFullService<Digimon, Long> {
 
     @Autowired
     private ImageDownloadService imageDownloadService;
+    private final DigimonRepository digimonRepository;
 
     @Autowired
     public DigimonService(DigimonRepository digimonRepository) {
         super(Digimon.class, "digimon/", digimonRepository);
+        this.digimonRepository = digimonRepository;
     }
 
     @Override
@@ -27,27 +32,15 @@ public class DigimonService extends GenericFullService<Digimon, Long> {
 
         if (digimon != null) {
             if (digimon.getPriorEvolutions() != null) {
-                Set<PriorEvolution> priorEvolutionsSet = new HashSet<>();
                 for (PriorEvolution priorEvolution : digimon.getPriorEvolutions()) {
-                    PriorEvolution formattedPriorEvolution = new PriorEvolution();
-                    formattedPriorEvolution.setDigimonPriorEvolutionId(priorEvolution.getId());
-                    formattedPriorEvolution.setCondition(priorEvolution.getCondition());
-                    formattedPriorEvolution.setDigimon(digimon);
-                    priorEvolutionsSet.add(formattedPriorEvolution);
+                    priorEvolution.setDigimon(digimon);
                 }
-                digimon.setPriorEvolutions(priorEvolutionsSet);
             }
 
             if (digimon.getNextEvolutions() != null) {
-                Set<NextEvolution> nextEvolutionsSet = new HashSet<>();
                 for (NextEvolution nextEvolution : digimon.getNextEvolutions()) {
-                    NextEvolution formattedNextEvolution = new NextEvolution();
-                    formattedNextEvolution.setDigimonNextEvolutionId(nextEvolution.getId());
-                    formattedNextEvolution.setCondition(nextEvolution.getCondition());
-                    formattedNextEvolution.setDigimon(digimon);
-                    nextEvolutionsSet.add(formattedNextEvolution);
+                    nextEvolution.setDigimon(digimon);
                 }
-                digimon.setNextEvolutions(nextEvolutionsSet);
             }
 
             if (digimon.getDescriptions() != null) {
@@ -77,4 +70,16 @@ public class DigimonService extends GenericFullService<Digimon, Long> {
 
         return digimon;
     }
+    public List<Digimon> findAllByCursor(Long cursor, int size) {
+        Pageable pageable = PageRequest.of(0, size, Sort.by("id").ascending());
+        Page<Digimon> digimonPage;
+        if (cursor != null) {
+            digimonPage = digimonRepository.findByIdGreaterThan(cursor, pageable);
+        } else {
+            digimonPage = digimonRepository.findAll(pageable);
+        }
+        return digimonPage.getContent();
+    }
+
+
 }

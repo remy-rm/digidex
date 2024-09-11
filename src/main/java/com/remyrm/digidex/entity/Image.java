@@ -19,6 +19,7 @@ public class Image implements HasImage {
 
     @ManyToOne
     @JoinColumn(name = "digimon_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Digimon digimon;
 
 

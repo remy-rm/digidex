@@ -1,5 +1,6 @@
 package com.remyrm.digidex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class Level {
     private String description;
 
     @ManyToMany(mappedBy = "levels")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Digimon> digimon = new HashSet<>();
 
     public Set<Digimon> getDigimon() {

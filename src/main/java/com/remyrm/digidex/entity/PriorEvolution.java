@@ -2,6 +2,7 @@ package com.remyrm.digidex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,12 +14,21 @@ public class PriorEvolution {
 
     @Column(name = "`condition`", columnDefinition = "TEXT")
     private String condition;
-    @Column(name = "digimon_prior_evolution_id")
-    private Long digimonPriorEvolutionId;
+
     @ManyToOne
     @JoinColumn(name = "digimon_id")
     @JsonIgnore
-    private Digimon digimon ;
+    private Digimon digimon;
+
+    @ManyToOne
+    @JoinColumn(name = "digimon_prior_evolution_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
+    private Digimon digimonPriorEvolution;
+
+    @JsonProperty("digimonPriorEvolution")
+    public DigimonInfo getDigimonPriorEvolutionInfo() {
+        return digimonPriorEvolution != null ? new DigimonInfo(digimonPriorEvolution.getId(), digimonPriorEvolution.getName()) : null;
+    }
 
     // Getters and setters
 
@@ -38,6 +48,33 @@ public class PriorEvolution {
         this.condition = condition;
     }
 
+
+    private static class DigimonInfo {
+        private Long id;
+        private String name;
+
+        public DigimonInfo(Long id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
     public Digimon getDigimon() {
         return digimon;
     }
@@ -46,11 +83,11 @@ public class PriorEvolution {
         this.digimon = digimon;
     }
 
-    public Long getDigimonPriorEvolutionId() {
-        return digimonPriorEvolutionId;
+    public Digimon getDigimonPriorEvolution() {
+        return digimonPriorEvolution;
     }
 
-    public void setDigimonPriorEvolutionId(Long digimonPriorEvolutionId) {
-        this.digimonPriorEvolutionId = digimonPriorEvolutionId;
+    public void setDigimonPriorEvolution(Digimon digimonPriorEvolution) {
+        this.digimonPriorEvolution = digimonPriorEvolution;
     }
 }

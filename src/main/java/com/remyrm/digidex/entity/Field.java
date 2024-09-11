@@ -22,6 +22,7 @@ public class Field implements HasImage {
 
 
     @ManyToMany(mappedBy = "fields")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Digimon> digimons = new HashSet<>();
 
     public long getId() {

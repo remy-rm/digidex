@@ -23,6 +23,7 @@ public class Skill {
 
     @ManyToOne
     @JoinColumn(name = "digimon_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Digimon digimon;
 
 

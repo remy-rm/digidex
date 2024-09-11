@@ -1,12 +1,10 @@
 package com.remyrm.digidex.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -174,7 +172,7 @@ public class Digimon {
     }
 
     public void setNextEvolutions(Set<NextEvolution> nextEvolutions) {
-        // Vider la collection existante au lieu de la remplacer
+
         this.nextEvolutions.clear();
         if (nextEvolutions != null) {
             this.nextEvolutions.addAll(nextEvolutions);
