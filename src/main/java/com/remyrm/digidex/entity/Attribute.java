@@ -2,15 +2,21 @@ package com.remyrm.digidex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder({ "id", "name", "description" })
 public class Attribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonProperty("name")
+    private String attribute;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     public long getId() {
         return id;
@@ -20,11 +26,6 @@ public class Attribute {
         this.id = id;
     }
 
-    @JsonProperty("name")
-    private String attribute;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
 
     public String getAttribute() {
         return attribute;

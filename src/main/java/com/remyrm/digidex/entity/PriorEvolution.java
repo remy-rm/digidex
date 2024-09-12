@@ -3,17 +3,16 @@ package com.remyrm.digidex.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder({ "id", "name", "condition" })
 public class PriorEvolution {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "`condition`", columnDefinition = "TEXT")
-    private String condition;
 
     @ManyToOne
     @JoinColumn(name = "digimon_id")
@@ -25,10 +24,17 @@ public class PriorEvolution {
     @JsonIgnore
     private Digimon digimonPriorEvolution;
 
-    @JsonProperty("digimonPriorEvolution")
-    public DigimonInfo getDigimonPriorEvolutionInfo() {
-        return digimonPriorEvolution != null ? new DigimonInfo(digimonPriorEvolution.getId(), digimonPriorEvolution.getName()) : null;
+    @JsonProperty("id")
+    public Long getNextEvolutionId() {
+        return digimonPriorEvolution != null ? digimonPriorEvolution.getId() : null;
     }
+
+    @JsonProperty("name")
+    public String getNextEvolutionName() {
+        return digimonPriorEvolution != null ? digimonPriorEvolution.getName() : null;
+    }
+    @Column(name = "`condition`", columnDefinition = "TEXT")
+    private String condition;
 
     // Getters and setters
 
@@ -48,32 +54,6 @@ public class PriorEvolution {
         this.condition = condition;
     }
 
-
-    private static class DigimonInfo {
-        private Long id;
-        private String name;
-
-        public DigimonInfo(Long id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
 
     public Digimon getDigimon() {
         return digimon;

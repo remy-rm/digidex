@@ -1,6 +1,8 @@
 package com.remyrm.digidex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.remyrm.digidex.views.Views;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,10 +15,14 @@ public class Digimon {
 
 
     @Id
+    @JsonView(Views.DigimonDetails.class)
     private Long id;
     @NotNull
+    @JsonView(Views.DigimonDetails.class)
     private String name;
+    @JsonView(Views.DigimonDetails.class)
     private Boolean xAntibody;
+    @JsonView(Views.DigimonDetails.class)
     private String releaseDate;
 
     @ManyToMany
@@ -27,13 +33,17 @@ public class Digimon {
     )
     private Set<Level> levels = new HashSet<>();
 
+
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonView(Views.DigimonDetails.class)
     private Set<Image> images = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonView(Views.DigimonDetails.class)
     private Set<Description> descriptions = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonView(Views.DigimonDetails.class)
     private Set<Skill> skills = new HashSet<>();
 
     @ManyToMany
@@ -42,6 +52,7 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "field_id")
     )
+    @JsonView(Views.DigimonDetails.class)
     private Set<Field> fields = new HashSet<>();
 
     @ManyToMany
@@ -50,6 +61,7 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "type_id")
     )
+    @JsonView(Views.DigimonDetails.class)
     private Set<Type> types = new HashSet<>();
 
     @ManyToMany
@@ -58,12 +70,15 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "attribute_id")
     )
+    @JsonView(Views.DigimonDetails.class)
     private Set<Attribute> attributes = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonView(Views.DigimonDetails.class)
     private Set<NextEvolution> nextEvolutions = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonView(Views.DigimonDetails.class)
     private Set<PriorEvolution> priorEvolutions = new HashSet<>();
 
 
@@ -75,8 +90,13 @@ public class Digimon {
         this.id = id;
     }
 
-    public Set<Field> getFields() {
-        return fields;
+
+    public Set<Long> getFields() {
+        Set<Long> fieldIds = new HashSet<>();
+        for (Field field : fields) {
+            fieldIds.add(field.getId());
+        }
+        return fieldIds;
     }
 
     public void setFields(Set<Field> fields) {
@@ -107,24 +127,36 @@ public class Digimon {
         this.releaseDate = releaseDate;
     }
 
-    public Set<Level> getLevels() {
-        return levels;
+    public Set<Long> getLevels() {
+        Set<Long> levelId = new HashSet<>();
+        for (Level level : levels) {
+            levelId.add(level.getId());
+        }
+        return levelId;
     }
 
     public void setLevels(Set<Level> levels) {
         this.levels = levels;
     }
 
-    public Set<Type> getTypes() {
-        return types;
+    public Set<Long> getTypes() {
+        Set<Long> typeId = new HashSet<>();
+        for (Type type : types) {
+            typeId.add(type.getId());
+        }
+        return typeId;
     }
 
     public void setTypes(Set<Type> types) {
         this.types = types;
     }
 
-    public Set<Attribute> getAttributes() {
-        return attributes;
+    public Set<Long> getAttributes() {
+        Set<Long> attributeId = new HashSet<>();
+        for (Attribute attribute : attributes) {
+            attributeId.add(attribute.getId());
+        }
+        return attributeId;
     }
 
     public void setAttributes(Set<Attribute> attributes) {
