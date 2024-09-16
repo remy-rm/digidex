@@ -24,8 +24,8 @@ do
   fi
 done
 
-#field 10
-#attribute 7
-#type 154
-#level 9
-#digimon 1460
+# src/main/resources/fetch-entities.sh field 1 10 1
+# src/main/resources/fetch-entities.sh attribute 1 7 1
+# src/main/resources/fetch-entities.sh type 1 154 1
+# src/main/resources/fetch-entities.sh level 1 9 1
+# src/main/resources/fetch-entities.sh digimon 1 1460 1

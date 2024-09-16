@@ -73,13 +73,13 @@ public class Digimon {
     @JsonView(Views.DigimonDetails.class)
     private Set<Attribute> attributes = new HashSet<>();
 
+
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonView(Views.DigimonDetails.class)
     private Set<NextEvolution> nextEvolutions = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonView(Views.DigimonDetails.class)
     private Set<PriorEvolution> priorEvolutions = new HashSet<>();
+
 
 
     public Long getId() {

@@ -14,31 +14,19 @@ public class NextEvolution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @ManyToOne
-    @JoinColumn(name = "digimon_next_evolution_id")
-    @JsonIgnore
-    private Digimon digimonNextEvolution;
-
     @ManyToOne
     @JoinColumn(name = "digimon_id")
     @JsonIgnore
     private Digimon digimon;
 
-    @JsonProperty("id")
-    public Long getNextEvolutionId() {
-        return digimonNextEvolution != null ? digimonNextEvolution.getId() : null;
-    }
 
-    @JsonProperty("name")
-    public String getNextEvolutionName() {
-        return digimonNextEvolution != null ? digimonNextEvolution.getName() : null;
-    }
+    @Column(name = "digimon_next_evolution_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private long digimonNextEvolution;
+
     @Column(name = "`condition`", columnDefinition = "TEXT")
     private String condition;
 
-
-    // Getters and setters
 
     public Long getId() {
         return id;
@@ -64,14 +52,11 @@ public class NextEvolution {
         this.digimon = digimon;
     }
 
-    public Digimon getDigimonNextEvolution() {
+    public long getDigimonNextEvolution() {
         return digimonNextEvolution;
     }
 
-    public void setDigimonNextEvolution(Digimon digimonNextEvolution) {
+    public void setDigimonNextEvolution(long digimonNextEvolution) {
         this.digimonNextEvolution = digimonNextEvolution;
     }
-
-
-
 }

@@ -3,6 +3,7 @@ package com.remyrm.digidex.service.genericService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.remyrm.digidex.common.HasImage;
 import com.remyrm.digidex.service.ImageDownloadService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.client.RestTemplate;
@@ -52,6 +53,7 @@ public abstract class GenericApiService<T, ID extends Serializable> {
         return null;
     }
 
+    @Transactional
     public T saveEntityFromApi(ID id) {
         T entity = fetchEntityById(id);
         if (entity != null) {

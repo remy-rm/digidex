@@ -2,7 +2,6 @@ package com.remyrm.digidex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
@@ -19,20 +18,11 @@ public class PriorEvolution {
     @JsonIgnore
     private Digimon digimon;
 
-    @ManyToOne
-    @JoinColumn(name = "digimon_prior_evolution_id", referencedColumnName = "id", insertable = false, updatable = false)
-    @JsonIgnore
-    private Digimon digimonPriorEvolution;
 
-    @JsonProperty("id")
-    public Long getNextEvolutionId() {
-        return digimonPriorEvolution != null ? digimonPriorEvolution.getId() : null;
-    }
+    @Column(name = "digimon_prior_evolution_id" )
+    private long digimonPriorEvolution;
 
-    @JsonProperty("name")
-    public String getNextEvolutionName() {
-        return digimonPriorEvolution != null ? digimonPriorEvolution.getName() : null;
-    }
+
     @Column(name = "`condition`", columnDefinition = "TEXT")
     private String condition;
 
@@ -63,11 +53,11 @@ public class PriorEvolution {
         this.digimon = digimon;
     }
 
-    public Digimon getDigimonPriorEvolution() {
+    public long getDigimonPriorEvolution() {
         return digimonPriorEvolution;
     }
 
-    public void setDigimonPriorEvolution(Digimon digimonPriorEvolution) {
+    public void setDigimonPriorEvolution(long digimonPriorEvolution) {
         this.digimonPriorEvolution = digimonPriorEvolution;
     }
 }

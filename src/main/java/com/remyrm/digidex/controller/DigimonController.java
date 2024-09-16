@@ -1,15 +1,15 @@
 package com.remyrm.digidex.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.entity.Digimon;
 import com.remyrm.digidex.repository.DigimonRepository;
 import com.remyrm.digidex.service.DigimonService;
-import com.remyrm.digidex.views.Views;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/digimon")
@@ -24,21 +24,23 @@ public class DigimonController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Digimon>> getAllByCursor(
+    public ResponseEntity<List<DigimonDTO>> getAllByCursor(
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "20") int size) {
         List<Digimon> digimons = digimonService.findAllByCursor(cursor, size);
-        return ResponseEntity.ok(digimons);
+        List<DigimonDTO> digimonDTOs = digimons.stream()
+                .map(digimonService::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(digimonDTOs);
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.DigimonDetails.class)
-    public ResponseEntity<Digimon> getEntityById(@PathVariable long id) {
+    public ResponseEntity<DigimonDTO> getEntityById(@PathVariable long id) {
         Optional<Digimon> entityOptional = digimonService.findById(id);
-        return entityOptional.map(ResponseEntity::ok)
+        return entityOptional.map(digimonService::toDTO)
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     @PostMapping("/fetch")
     public ResponseEntity<String> createDigimon(@RequestParam long id) {
@@ -58,7 +60,6 @@ public class DigimonController {
             @RequestParam(required = false) String typeNames,
             @RequestParam(required = false) String attributeNames,
             @RequestParam(required = false) String fieldNames,
-            @RequestParam(required = false) String skillNames,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "20") int size
     ) {
