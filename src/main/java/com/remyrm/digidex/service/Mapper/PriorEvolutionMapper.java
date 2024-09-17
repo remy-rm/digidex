@@ -15,11 +15,12 @@ public class PriorEvolutionMapper {
     }
 
     public PriorEvolutionDTO toDTO(PriorEvolution priorEvolution) {
-        String digimonName = digimonRepository.findById(priorEvolution.getId()).isPresent()
-                ? digimonRepository.findById(priorEvolution.getId()).get().getName()
+
+        String digimonName = digimonRepository.findById(priorEvolution.getDigimonPriorEvolution()).isPresent()
+                ? digimonRepository.findById(priorEvolution.getDigimonPriorEvolution()).get().getName()
                 : "Unknown";
 
-        return new PriorEvolutionDTO(priorEvolution.getCondition(), digimonName, priorEvolution.getId());
+        return new PriorEvolutionDTO(priorEvolution.getCondition(), priorEvolution.getDigimonPriorEvolution(), digimonName);
     }
 
 }

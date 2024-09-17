@@ -18,6 +18,8 @@ public class ImageDownloadService {
     @Value("${image.storage.path}")
     private String imageStoragePath;
 
+    private static final String imagesPathBdd = "images";
+
     public String downloadImage(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -27,34 +29,33 @@ public class ImageDownloadService {
         String contentType = connection.getContentType();
         String fileName = extractFileNameFromUrl(imageUrl);
         Path imagePath = Paths.get(imageStoragePath, fileName);
-        if (contentType.startsWith("image/")) {
+
+        if (contentType != null && contentType.startsWith("image/")) {
 
             Files.createDirectories(imagePath.getParent());
 
             if (Files.exists(imagePath)) {
-                return imagePath.toString();
+                System.out.println("Image already exists at " + imagesPathBdd + "/" + fileName);
+                return imagesPathBdd + "/" + fileName;
             }
             try (InputStream in = connection.getInputStream()) {
                 Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return imagePath.toString();
+            return imagesPathBdd + "/" + fileName; // Return path relative to imagesPathBdd
         } else {
             throw new IOException("L'URL ne pointe pas vers une image valide");
         }
     }
 
     public boolean imageExists(String imageUrl) {
-        System.out.println(imageUrl);
         String fileName = extractFileNameFromUrl(imageUrl);
         Path imagePath = Paths.get(imageStoragePath, fileName);
-        System.out.println(imagePath);
 
         return Files.exists(imagePath);
     }
 
     private String extractFileNameFromUrl(String imageUrl) {
-        System.out.println(imageUrl.substring(imageUrl.lastIndexOf('/') + 1));
         return imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     }
 }

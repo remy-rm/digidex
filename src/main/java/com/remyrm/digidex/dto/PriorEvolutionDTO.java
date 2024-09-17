@@ -2,11 +2,11 @@ package com.remyrm.digidex.dto;
 
 public class PriorEvolutionDTO {
 
-        private Long id;
-        private String condition;
-        private String digimonName;
+    private Long id;
+    private String digimonName;
+    private String condition;
 
-    public PriorEvolutionDTO(String condition, String digimonName, Long id) {
+    public PriorEvolutionDTO(String condition, Long id, String digimonName) {
         this.condition = condition;
         this.digimonName = digimonName;
         this.id = id;

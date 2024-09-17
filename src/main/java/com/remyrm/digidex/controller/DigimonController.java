@@ -1,13 +1,16 @@
 package com.remyrm.digidex.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.entity.Digimon;
 import com.remyrm.digidex.repository.DigimonRepository;
 import com.remyrm.digidex.service.DigimonService;
+import com.remyrm.digidex.views.Views;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -54,7 +57,7 @@ public class DigimonController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Digimon>> searchDigimonByCriteria(
+    public ResponseEntity<List<DigimonDTO>> searchDigimonByCriteria(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) String levelNames,
             @RequestParam(required = false) String typeNames,
@@ -72,6 +75,13 @@ public class DigimonController {
                 cursor,
                 size
         ));
+    }
+
+    @GetMapping("/searchAll")
+    @JsonView(Views.DigimonSearchAll.class)
+    public ResponseEntity<Map<String, Object>> search(@RequestParam String query) {
+        Map<String, Object> result = digimonService.searchByCriteria(query);
+        return ResponseEntity.ok(result);
     }
 
 }

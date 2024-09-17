@@ -4,7 +4,7 @@ import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.dto.NextEvolutionDTO;
 import com.remyrm.digidex.dto.PriorEvolutionDTO;
 import com.remyrm.digidex.entity.*;
-import com.remyrm.digidex.repository.DigimonRepository;
+import com.remyrm.digidex.repository.*;
 import com.remyrm.digidex.service.Mapper.NextEvolutionMapper;
 import com.remyrm.digidex.service.Mapper.PriorEvolutionMapper;
 import com.remyrm.digidex.service.genericService.GenericFullService;
@@ -16,9 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,15 +27,23 @@ public class DigimonService extends GenericFullService<Digimon, Long> {
     private final SearchDigimonByCriteriaService searchDigimonByCriteria;
     private final NextEvolutionMapper nextEvolutionMapper;
     private final PriorEvolutionMapper priorEvolutionMapper;
+    private final LevelRepository levelRepository;
+    private final AttributeRepository attributeRepository;
+    private final TypeRepository typeRepository;
+    private final FieldRepository fieldRepository;
 
     @Autowired
-    public DigimonService(DigimonRepository digimonRepository, SearchDigimonByCriteriaService searchDigimonByCriteria, ImageDownloadService imageDownloadService, NextEvolutionMapper nextEvolutionMapper, PriorEvolutionMapper priorEvolutionMapper) {
+    public DigimonService(DigimonRepository digimonRepository, SearchDigimonByCriteriaService searchDigimonByCriteria, ImageDownloadService imageDownloadService, NextEvolutionMapper nextEvolutionMapper, PriorEvolutionMapper priorEvolutionMapper, LevelRepository levelRepository, AttributeRepository attributeRepository, TypeRepository typeRepository, FieldRepository fieldRepository) {
         super(Digimon.class, "digimon/", digimonRepository);
         this.digimonRepository = digimonRepository;
         this.searchDigimonByCriteria = searchDigimonByCriteria;
         this.imageDownloadService = imageDownloadService;
         this.nextEvolutionMapper = nextEvolutionMapper;
         this.priorEvolutionMapper = priorEvolutionMapper;
+        this.levelRepository = levelRepository;
+        this.attributeRepository = attributeRepository;
+        this.typeRepository = typeRepository;
+        this.fieldRepository = fieldRepository;
     }
 
     @Override
@@ -109,7 +115,7 @@ public class DigimonService extends GenericFullService<Digimon, Long> {
         return digimonPage.getContent();
     }
 
-    public List<Digimon> searchDigimonByCriteria(
+    public List<DigimonDTO> searchDigimonByCriteria(
             String query,
             String levelNames,
             String typeNames,
@@ -118,22 +124,34 @@ public class DigimonService extends GenericFullService<Digimon, Long> {
             Long cursor,
             int size
     ) {
-        return searchDigimonByCriteria.searchDigimonByCriteria(
+        List<Digimon> digimons = searchDigimonByCriteria.searchDigimonByCriteria(
                 query, levelNames, typeNames, attributeNames, fieldNames, cursor, size
         );
+        return digimons.stream()
+                .map(this::toDTO) // Convertir chaque Digimon en DigimonDTO
+                .collect(Collectors.toList());
     }
+
+
     public DigimonDTO toDTO(Digimon digimon) {
         Set<NextEvolutionDTO> nextEvolutionDTOs = digimon.getNextEvolutions().stream()
                 .map(nextEvolutionMapper::toDTO)
-                .collect(Collectors.toSet()); // Utilisez Set ici
+                .collect(Collectors.toSet());
         Set<PriorEvolutionDTO> priorEvolutionDTOs = digimon.getPriorEvolutions().stream()
                 .map(priorEvolutionMapper::toDTO)
-                .collect(Collectors.toSet()); // Utilisez Set ici
+                .collect(Collectors.toSet());
+
+        // Extraire l'URL de la première image
+        String imageUrl = digimon.getImages().stream()
+                .findFirst() // Récupère la première image, s'il y en a une
+                .map(Image::getImage) // On extrait l'URL de l'image
+                .orElse(null); // Si aucune image, retourne null
 
         // Créez et retournez le DTO pour Digimon
         return new DigimonDTO(
                 digimon.getId(),
                 digimon.getName(),
+                imageUrl,
                 digimon.getLevels(),
                 digimon.getTypes(),
                 digimon.getAttributes(),
@@ -144,5 +162,27 @@ public class DigimonService extends GenericFullService<Digimon, Long> {
                 nextEvolutionDTOs,
                 priorEvolutionDTOs
         );
+    }
+
+
+    public Map<String, Object> searchByCriteria(String query) {
+        // Trouver les Digimon correspondant au critère
+        Set<Digimon> digimons = digimonRepository.findByCriteria(query);
+
+        // Trouver les entités associées correspondant au critère
+        Set<Level> levels = levelRepository.findByLevelContaining(query);
+        Set<Attribute> attributes = attributeRepository.findByAttributeContaining(query);
+        Set<Type> types = typeRepository.findByTypeContaining(query);
+        Set<Field> fields = fieldRepository.findByNameContaining(query);
+
+        // Créer un résultat combiné
+        Map<String, Object> result = new HashMap<>();
+        result.put("digimons", digimons);
+        result.put("levels", levels);
+        result.put("attributes", attributes);
+        result.put("types", types);
+        result.put("fields", fields);
+
+        return result;
     }
 }

@@ -13,12 +13,13 @@ public class NextEvolutionMapper {
     public NextEvolutionMapper(DigimonRepository DigimonRepository) {
         this.DigimonRepository = DigimonRepository;
     }
-    public NextEvolutionDTO toDTO(NextEvolution nextEvolution) {
-        String digimonName = DigimonRepository.findById(nextEvolution.getId()).isPresent()
-                ? DigimonRepository.findById(nextEvolution.getId()).get().getName()
-                : "Unknown";
 
-        return new NextEvolutionDTO(nextEvolution.getId(), digimonName, nextEvolution.getCondition());
+    public NextEvolutionDTO toDTO(NextEvolution nextEvolution) {
+
+        String digimonName = DigimonRepository.findById(nextEvolution.getDigimonNextEvolution()).isPresent()
+                ? DigimonRepository.findById(nextEvolution.getDigimonNextEvolution()).get().getName()
+                : "Unknown";
+        return new NextEvolutionDTO(nextEvolution.getCondition(), nextEvolution.getDigimonNextEvolution(), digimonName);
     }
 
 }

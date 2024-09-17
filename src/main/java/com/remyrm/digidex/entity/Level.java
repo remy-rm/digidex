@@ -1,8 +1,9 @@
 package com.remyrm.digidex.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.remyrm.digidex.views.Views;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -15,9 +16,11 @@ public class Level {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.DigimonSearchAll.class)
     private long id;
 
     @JsonProperty("name")
+    @JsonView(Views.DigimonSearchAll.class)
     private String level;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -49,6 +52,7 @@ public class Level {
     public String getLevel() {
         return level;
     }
+
     public void setLevel(String levels) {
         this.level = levels;
     }

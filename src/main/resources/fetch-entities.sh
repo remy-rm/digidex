@@ -18,9 +18,9 @@ do
   echo "Response for $ENTITY with ID $id: $response"
 
   # Pause
-  if [ $PAUSE -gt 0 ]; then
+  if (( $(echo "$PAUSE > 0" | bc -l) )); then
     echo "Waiting for $PAUSE seconds..."
-    sleep $PAUSE
+    sleep "$PAUSE"
   fi
 done
 

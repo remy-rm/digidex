@@ -2,7 +2,9 @@ package com.remyrm.digidex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.remyrm.digidex.common.HasImage;
+import com.remyrm.digidex.views.Views;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -12,12 +14,15 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Field implements HasImage {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.DigimonSearchAll.class)
     private long id;
+    @JsonView(Views.DigimonSearchAll.class)
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
     @JsonProperty("href")
+    @JsonView(Views.DigimonSearchAll.class)
     private String image;
 
 

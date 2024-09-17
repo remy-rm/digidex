@@ -3,14 +3,14 @@ package com.remyrm.digidex.dto;
 public class NextEvolutionDTO {
 
     private Long id;
-    private String condition;
     private String digimonName;
+    private String condition;
 
 
-    public NextEvolutionDTO(Long id, String condition, String digimonName) {
-        this.id = id;
+    public NextEvolutionDTO(String condition, Long id, String digimonName) {
         this.condition = condition;
         this.digimonName = digimonName;
+        this.id = id;
     }
 
     // Getters and setters

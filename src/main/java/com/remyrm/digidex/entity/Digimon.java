@@ -15,14 +15,12 @@ public class Digimon {
 
 
     @Id
-    @JsonView(Views.DigimonDetails.class)
+    @JsonView(Views.DigimonSearchAll.class)
     private Long id;
     @NotNull
-    @JsonView(Views.DigimonDetails.class)
+    @JsonView(Views.DigimonSearchAll.class)
     private String name;
-    @JsonView(Views.DigimonDetails.class)
     private Boolean xAntibody;
-    @JsonView(Views.DigimonDetails.class)
     private String releaseDate;
 
     @ManyToMany
@@ -35,15 +33,12 @@ public class Digimon {
 
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonView(Views.DigimonDetails.class)
     private Set<Image> images = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonView(Views.DigimonDetails.class)
     private Set<Description> descriptions = new HashSet<>();
 
     @OneToMany(mappedBy = "digimon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonView(Views.DigimonDetails.class)
     private Set<Skill> skills = new HashSet<>();
 
     @ManyToMany
@@ -52,7 +47,6 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "field_id")
     )
-    @JsonView(Views.DigimonDetails.class)
     private Set<Field> fields = new HashSet<>();
 
     @ManyToMany
@@ -61,7 +55,6 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "type_id")
     )
-    @JsonView(Views.DigimonDetails.class)
     private Set<Type> types = new HashSet<>();
 
     @ManyToMany
@@ -70,7 +63,7 @@ public class Digimon {
             joinColumns = @JoinColumn(name = "digimon_id"),
             inverseJoinColumns = @JoinColumn(name = "attribute_id")
     )
-    @JsonView(Views.DigimonDetails.class)
+
     private Set<Attribute> attributes = new HashSet<>();
 
 
@@ -81,7 +74,6 @@ public class Digimon {
     private Set<PriorEvolution> priorEvolutions = new HashSet<>();
 
 
-
     public Long getId() {
         return id;
     }
@@ -90,6 +82,10 @@ public class Digimon {
         this.id = id;
     }
 
+    @JsonView(Views.DigimonSearchAll.class)
+    public String getImageUrl() {
+        return images.isEmpty() ? null : images.iterator().next().getImage();
+    }
 
     public Set<Long> getFields() {
         Set<Long> fieldIds = new HashSet<>();

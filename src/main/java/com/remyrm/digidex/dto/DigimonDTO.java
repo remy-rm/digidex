@@ -1,10 +1,12 @@
 package com.remyrm.digidex.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.remyrm.digidex.entity.Description;
 import com.remyrm.digidex.entity.Skill;
 
 import java.util.Set;
 
+@JsonPropertyOrder({"id", "name", "imageUrl", "levels", "types", "attributes", "fields", "releaseDate", "descriptions", "skills", "nextEvolutions", "priorEvolutions"})
 public class DigimonDTO {
     private Long id;
     private String name;
@@ -15,15 +17,17 @@ public class DigimonDTO {
     private String releaseDate;
     private Set<Description> descriptions;
     private Set<Skill> skills;
-    private Set<NextEvolutionDTO> nextEvolutions; // Utilisez Set ici
-    private Set<PriorEvolutionDTO> priorEvolutions; // Utilisez Set ici
+    private String imageUrl; // Nouveau champ pour l'URL de l'image
+    private Set<NextEvolutionDTO> nextEvolutions;
+    private Set<PriorEvolutionDTO> priorEvolutions;
 
     public DigimonDTO() {
     }
 
-    public DigimonDTO(Long id, String name, Set<Long> levels, Set<Long> types, Set<Long> attributes, Set<Long> fields, String releaseDate, Set<Description> descriptions, Set<Skill> skills, Set<NextEvolutionDTO> nextEvolutions, Set<PriorEvolutionDTO> priorEvolutions) {
+    public DigimonDTO(Long id, String name, String imageUrl, Set<Long> levels, Set<Long> types, Set<Long> attributes, Set<Long> fields, String releaseDate, Set<Description> descriptions, Set<Skill> skills, Set<NextEvolutionDTO> nextEvolutions, Set<PriorEvolutionDTO> priorEvolutions) {
         this.id = id;
         this.name = name;
+        this.imageUrl = imageUrl; // Utilisation du champ image URL
         this.levels = levels;
         this.types = types;
         this.attributes = attributes;
@@ -107,6 +111,14 @@ public class DigimonDTO {
 
     public void setSkills(Set<Skill> skills) {
         this.skills = skills;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Set<NextEvolutionDTO> getNextEvolutions() {
