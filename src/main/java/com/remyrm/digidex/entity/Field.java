@@ -17,18 +17,21 @@ public class Field implements HasImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.DigimonSearchAll.class)
     private long id;
+
     @JsonView(Views.DigimonSearchAll.class)
     private String name;
+
     @Column(columnDefinition = "TEXT")
     private String description;
+
     @JsonProperty("href")
     @JsonView(Views.DigimonSearchAll.class)
     private String image;
 
-
     @ManyToMany(mappedBy = "fields")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Digimon> digimons = new HashSet<>();
+
 
     public long getId() {
         return id;

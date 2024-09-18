@@ -18,6 +18,7 @@ public class Image implements HasImage {
     @JsonProperty("href")
     @JsonView(Views.DigimonSearchAll.class)
     private String image;
+
     private boolean transparent;
 
     @ManyToOne

@@ -1,7 +1,9 @@
 package com.remyrm.digidex.service;
 
+import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.entity.*;
 import com.remyrm.digidex.repository.DigimonRepository;
+import com.remyrm.digidex.service.Mapper.DigimonMapper;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.PageRequest;
@@ -15,15 +17,35 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SearchDigimonByCriteriaService  {
+public class SearchDigimonByCriteriaService {
 
     private final DigimonRepository digimonRepository;
+    private final DigimonMapper digimonMapper;
 
-    public SearchDigimonByCriteriaService(DigimonRepository digimonRepository) {
+    public SearchDigimonByCriteriaService(DigimonRepository digimonRepository, DigimonMapper digimonMapper) {
         this.digimonRepository = digimonRepository;
+        this.digimonMapper = digimonMapper;
     }
 
-    public List<Digimon> searchDigimonByCriteria(
+    public List<DigimonDTO> searchDigimonByCriteria(
+            String query,
+            String levelNames,
+            String typeNames,
+            String attributeNames,
+            String fieldNames,
+            Long cursor,
+            int size
+    ) {
+        List<Digimon> digimons = spesification(
+                query, levelNames, typeNames, attributeNames, fieldNames, cursor, size
+        );
+        return digimons.stream()
+                .map(digimonMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<Digimon> spesification(
             String query,
             String levelNames,
             String typeNames,
@@ -35,13 +57,11 @@ public class SearchDigimonByCriteriaService  {
         Specification<Digimon> spec = (root, criteriaQuery, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
-            // Filtrage par nom
             if (query != null && !query.isEmpty()) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + query.toLowerCase() + "%"));
             }
 
-            // Filtrage par niveaux
             if (levelNames != null && !levelNames.isEmpty()) {
                 List<String> levels = Arrays.stream(levelNames.split(","))
                         .map(String::trim) // Nettoyer les espaces
@@ -50,7 +70,6 @@ public class SearchDigimonByCriteriaService  {
                 predicate = criteriaBuilder.and(predicate, levelsJoin.get("level").in(levels));
             }
 
-            // Filtrage par types
             if (typeNames != null && !typeNames.isEmpty()) {
                 List<String> types = Arrays.stream(typeNames.split(","))
                         .map(String::trim) // Nettoyer les espaces
@@ -59,7 +78,6 @@ public class SearchDigimonByCriteriaService  {
                 predicate = criteriaBuilder.and(predicate, typesJoin.get("type").in(types));
             }
 
-            // Filtrage par attributs
             if (attributeNames != null && !attributeNames.isEmpty()) {
                 List<String> attributes = Arrays.stream(attributeNames.split(","))
                         .map(String::trim) // Nettoyer les espaces
@@ -68,7 +86,6 @@ public class SearchDigimonByCriteriaService  {
                 predicate = criteriaBuilder.and(predicate, attributesJoin.get("attribute").in(attributes));
             }
 
-            // Filtrage par champs
             if (fieldNames != null && !fieldNames.isEmpty()) {
                 List<String> fields = Arrays.stream(fieldNames.split(","))
                         .map(String::trim) // Nettoyer les espaces
@@ -78,7 +95,6 @@ public class SearchDigimonByCriteriaService  {
             }
 
 
-            // Filtrage par curseur
             if (cursor != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThan(root.get("id"), cursor));
             }

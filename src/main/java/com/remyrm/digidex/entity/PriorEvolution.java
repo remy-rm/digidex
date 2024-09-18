@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({ "id", "name", "condition" })
+@JsonPropertyOrder({"id", "name", "condition"})
 public class PriorEvolution {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,15 +18,12 @@ public class PriorEvolution {
     @JsonIgnore
     private Digimon digimon;
 
-
-    @Column(name = "digimon_prior_evolution_id" )
+    @Column(name = "digimon_prior_evolution_id")
     private long digimonPriorEvolution;
-
 
     @Column(name = "`condition`", columnDefinition = "TEXT")
     private String condition;
 
-    // Getters and setters
 
     public Long getId() {
         return id;

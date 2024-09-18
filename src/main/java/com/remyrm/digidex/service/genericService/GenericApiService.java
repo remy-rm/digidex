@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.remyrm.digidex.common.HasImage;
 import com.remyrm.digidex.service.ImageDownloadService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,21 +12,24 @@ import java.io.Serializable;
 
 public abstract class GenericApiService<T, ID extends Serializable> {
 
-    @Autowired
-    protected RestTemplate restTemplate;
 
-    @Autowired
-    protected JpaRepository<T, ID> repository;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private ImageDownloadService imageDownloadService;
+    private final JpaRepository<T, ID> repository;
+
+    private final ImageDownloadService imageDownloadService;
 
     private final Class<T> entityClass;
+
     private final String apiUrl;
 
-    public GenericApiService(Class<T> entityClass, String apiUrl) {
+    public GenericApiService(Class<T> entityClass, String apiUrl, JpaRepository<T, ID> repository, ImageDownloadService imageDownloadService, RestTemplate restTemplate) {
         this.entityClass = entityClass;
         this.apiUrl = apiUrl;
+        this.repository = repository;
+        this.imageDownloadService = imageDownloadService;
+        this.restTemplate = restTemplate;
+
     }
 
     public T fetchEntityById(ID id) {

@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 public class Skill {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private long id;
 
@@ -38,7 +38,6 @@ public class Skill {
     public void setDigimon(Digimon digimon) {
         this.digimon = digimon;
     }
-
 
     public String getSkill() {
         return skill;

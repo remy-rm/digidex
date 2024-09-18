@@ -12,13 +12,16 @@ import jakarta.persistence.Id;
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Type {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.DigimonSearchAll.class)
     private long id;
+
     @JsonProperty("name")
     @JsonView(Views.DigimonSearchAll.class)
     private String type;
+
 
     public String getType() {
         return type;

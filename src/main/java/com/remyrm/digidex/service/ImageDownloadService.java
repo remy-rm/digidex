@@ -25,7 +25,6 @@ public class ImageDownloadService {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();
-
         String contentType = connection.getContentType();
         String fileName = extractFileNameFromUrl(imageUrl);
         Path imagePath = Paths.get(imageStoragePath, fileName);
@@ -35,16 +34,15 @@ public class ImageDownloadService {
             Files.createDirectories(imagePath.getParent());
 
             if (Files.exists(imagePath)) {
-                System.out.println("Image already exists at " + imagesPathBdd + "/" + fileName);
                 return imagesPathBdd + "/" + fileName;
             }
             try (InputStream in = connection.getInputStream()) {
                 Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return imagesPathBdd + "/" + fileName; // Return path relative to imagesPathBdd
+            return imagesPathBdd + "/" + fileName;
         } else {
-            throw new IOException("L'URL ne pointe pas vers une image valide");
+            throw new IOException("image not found");
         }
     }
 

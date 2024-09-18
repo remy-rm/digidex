@@ -15,10 +15,11 @@ public class Attribute {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.DigimonSearchAll.class)
     private long id;
+
     @JsonProperty("name")
     @JsonView(Views.DigimonSearchAll.class)
     private String attribute;
-
+    
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -29,7 +30,6 @@ public class Attribute {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public String getAttribute() {
         return attribute;

@@ -5,6 +5,7 @@ import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.entity.Digimon;
 import com.remyrm.digidex.repository.DigimonRepository;
 import com.remyrm.digidex.service.DigimonService;
+import com.remyrm.digidex.service.Mapper.DigimonMapper;
 import com.remyrm.digidex.views.Views;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,11 @@ import java.util.stream.Collectors;
 public class DigimonController {
 
     private final DigimonService digimonService;
-    private final DigimonRepository digimonRepository;
+    private final DigimonMapper digimonMapper;
 
-    public DigimonController(DigimonService digimonService, DigimonRepository digimonRepository) {
+    public DigimonController(DigimonService digimonService, DigimonRepository digimonRepository, DigimonMapper digimonMapper) {
         this.digimonService = digimonService;
-        this.digimonRepository = digimonRepository;
+        this.digimonMapper = digimonMapper;
     }
 
     @GetMapping("/all")
@@ -32,7 +33,7 @@ public class DigimonController {
             @RequestParam(defaultValue = "20") int size) {
         List<Digimon> digimons = digimonService.findAllByCursor(cursor, size);
         List<DigimonDTO> digimonDTOs = digimons.stream()
-                .map(digimonService::toDTO)
+                .map(digimonMapper::toDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(digimonDTOs);
     }
@@ -40,7 +41,7 @@ public class DigimonController {
     @GetMapping("/{id}")
     public ResponseEntity<DigimonDTO> getEntityById(@PathVariable long id) {
         Optional<Digimon> entityOptional = digimonService.findById(id);
-        return entityOptional.map(digimonService::toDTO)
+        return entityOptional.map(digimonMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -66,7 +67,7 @@ public class DigimonController {
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "20") int size
     ) {
-        return ResponseEntity.ok(digimonService.searchDigimonByCriteria(
+        return ResponseEntity.ok(digimonService.searchDigimon(
                 query,
                 levelNames,
                 typeNames,
@@ -80,7 +81,7 @@ public class DigimonController {
     @GetMapping("/searchAll")
     @JsonView(Views.DigimonSearchAll.class)
     public ResponseEntity<Map<String, Object>> search(@RequestParam String query) {
-        Map<String, Object> result = digimonService.searchByCriteria(query);
+        Map<String, Object> result = digimonService.getAllWithNameContaining(query);
         return ResponseEntity.ok(result);
     }
 

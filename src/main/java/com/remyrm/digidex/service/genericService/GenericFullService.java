@@ -1,7 +1,9 @@
 package com.remyrm.digidex.service.genericService;
 
+import com.remyrm.digidex.service.ImageDownloadService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -10,8 +12,12 @@ public abstract class GenericFullService<T, ID extends Serializable> extends Gen
 
     private final JpaRepository<T, ID> repository;
 
-    public GenericFullService(Class<T> entityClass, String apiUrl, JpaRepository<T, ID> repository) {
-        super(entityClass, apiUrl);
+    public GenericFullService(Class<T> entityClass,
+                              String apiUrl,
+                              JpaRepository<T, ID> repository,
+                              RestTemplate restTemplate,
+                              ImageDownloadService imageDownloadService) {
+        super(entityClass, apiUrl, repository, imageDownloadService, restTemplate);
         this.repository = repository;
     }
 

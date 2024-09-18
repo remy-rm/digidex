@@ -13,14 +13,16 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Digimon {
 
-
     @Id
     @JsonView(Views.DigimonSearchAll.class)
     private Long id;
+
     @NotNull
     @JsonView(Views.DigimonSearchAll.class)
     private String name;
+
     private Boolean xAntibody;
+
     private String releaseDate;
 
     @ManyToMany
@@ -74,17 +76,17 @@ public class Digimon {
     private Set<PriorEvolution> priorEvolutions = new HashSet<>();
 
 
+    @JsonView(Views.DigimonSearchAll.class)
+    public String getImageUrl() {
+        return images.isEmpty() ? null : images.iterator().next().getImage();
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @JsonView(Views.DigimonSearchAll.class)
-    public String getImageUrl() {
-        return images.isEmpty() ? null : images.iterator().next().getImage();
     }
 
     public Set<Long> getFields() {
@@ -188,7 +190,6 @@ public class Digimon {
     }
 
     public void setPriorEvolutions(Set<PriorEvolution> priorEvolutions) {
-        // Vider la collection existante au lieu de la remplacer
         this.priorEvolutions.clear();
         if (priorEvolutions != null) {
             this.priorEvolutions.addAll(priorEvolutions);
@@ -200,7 +201,6 @@ public class Digimon {
     }
 
     public void setNextEvolutions(Set<NextEvolution> nextEvolutions) {
-
         this.nextEvolutions.clear();
         if (nextEvolutions != null) {
             this.nextEvolutions.addAll(nextEvolutions);

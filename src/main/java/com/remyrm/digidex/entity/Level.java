@@ -13,7 +13,6 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Level {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.DigimonSearchAll.class)
@@ -22,6 +21,7 @@ public class Level {
     @JsonProperty("name")
     @JsonView(Views.DigimonSearchAll.class)
     private String level;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 

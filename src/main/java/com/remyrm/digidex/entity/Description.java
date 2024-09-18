@@ -11,22 +11,19 @@ public class Description {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String origin;
+
     private String language;
+
     @Column(columnDefinition = "TEXT")
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "digimon_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Digimon digimon ;
+    private Digimon digimon;
 
-
-
-    // Constructeur par défaut
-    public Description() {
-    }
-
-    // Getters et Setters
     public Long getId() {
         return id;
     }

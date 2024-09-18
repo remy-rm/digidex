@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({ "id", "name", "condition" })
+@JsonPropertyOrder({"id", "name", "condition"})
 public class NextEvolution {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,6 @@ public class NextEvolution {
     @JoinColumn(name = "digimon_id")
     @JsonIgnore
     private Digimon digimon;
-
 
     @Column(name = "digimon_next_evolution_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

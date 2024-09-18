@@ -21,8 +21,6 @@ public class DigimonDTO {
     private Set<NextEvolutionDTO> nextEvolutions;
     private Set<PriorEvolutionDTO> priorEvolutions;
 
-    public DigimonDTO() {
-    }
 
     public DigimonDTO(Long id, String name, String imageUrl, Set<Long> levels, Set<Long> types, Set<Long> attributes, Set<Long> fields, String releaseDate, Set<Description> descriptions, Set<Skill> skills, Set<NextEvolutionDTO> nextEvolutions, Set<PriorEvolutionDTO> priorEvolutions) {
         this.id = id;
