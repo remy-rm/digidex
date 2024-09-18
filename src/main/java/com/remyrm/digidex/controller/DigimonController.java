@@ -30,7 +30,7 @@ public class DigimonController {
     @GetMapping("/all")
     public ResponseEntity<List<DigimonDTO>> getAllByCursor(
             @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "5") int size) {
         List<Digimon> digimons = digimonService.findAllByCursor(cursor, size);
         List<DigimonDTO> digimonDTOs = digimons.stream()
                 .map(digimonMapper::toDTO)
@@ -65,7 +65,7 @@ public class DigimonController {
             @RequestParam(required = false) String attributeNames,
             @RequestParam(required = false) String fieldNames,
             @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         return ResponseEntity.ok(digimonService.searchDigimon(
                 query,
