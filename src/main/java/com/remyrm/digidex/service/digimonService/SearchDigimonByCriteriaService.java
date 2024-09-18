@@ -1,4 +1,4 @@
-package com.remyrm.digidex.service;
+package com.remyrm.digidex.service.digimonService;
 
 import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.entity.*;

@@ -1,11 +1,9 @@
-package com.remyrm.digidex.service;
+package com.remyrm.digidex.service.digimonService;
 
 import com.remyrm.digidex.dto.DigimonDTO;
 import com.remyrm.digidex.entity.Digimon;
 import com.remyrm.digidex.repository.DigimonRepository;
-import com.remyrm.digidex.service.digimonService.DigimonFetchService;
-import com.remyrm.digidex.service.digimonService.DigimonPaginationService;
-import com.remyrm.digidex.service.digimonService.GetAllWithNameContainingService;
+import com.remyrm.digidex.service.ImageDownloadService;
 import com.remyrm.digidex.service.genericService.GenericFullService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
